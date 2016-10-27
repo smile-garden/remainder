@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en" ng-app="reminder">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>提醒事项</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/angular.js"></script>
+    <script src="js/index.js"></script>
+</head>
+<body ng-controller="mainCtrl">
+ <div class="wrapper">
+     <div class="main">
+         <div class="card">
+             <div class="sanjiao"></div>
+             <div class="out">
+                 <card-list>
+                     <div class="content">
+                         <div class="input">
+                             <div class="padding {{current.them}}" >
+                                 <input type="text" ng-model="current.title" value="{{current.title}}" >
+                             </div>
+                         </div>
+                         <div class="border"></div>
+                         <div class="color-list">颜色列表</div>
+                         <div class="color-box">
+                             <div class="selection-circle {{v.theme}} "  ng-class="{active:v.theme==current.them}"  ng-repeat="v in circle" date-id="{{v.id}}" ng-click="change(v)" >
+                                 <div class="color-icon {{v.theme}} "></div>
+                             </div>
+                         </div>
+                         <div class="anniu">
+                             <div class="delete">
+                                 <div class="delete-btn" ng-click="shanchu(current.id)" >删除</div>
+                             </div>
+                             <div class="quxiao-wancheng">
+                                 <div class="quxiao" ng-click="deletecard()">取消</div>
+                                 <div class="line">
+                                     <span></span>
+                                 </div>
+                                 <div class="wancheng" ng-click="deletecard()">完成</div>
+                             </div>
+                         </div>
+                     </div>
+                     <span class="hengxian"><span></span></span>
+                 </card-list>
+
+             </div>
+         </div>
+         <!--左部分-->
+         <div class="left">
+             <div class="top">
+                <div class="icloud-controls">
+                    <div class="title">
+                        <div class="zhuyi">提醒事项</div>
+                        <div class="icloud-text"></div>
+                        <div class="chevron"></div>
+                    </div>
+                </div>
+                     <div class="button" ng-click="addlist()">
+                         <div class="img"></div>
+                     </div>
+             </div>
+             <div class="bottom-box">
+                 <div class="bottom">
+                     <div class="jihua">
+                         <div class="scheduled-icon"></div>
+                         <div class="yijihua">已计划</div>
+                         <div class="row-divider-bottom"></div>
+                     </div>
+                     <div class="content">
+                             <new-ul ng-repeat="v in arr" ng-click="setcurrent(v)">
+                                 <li class="{{v.them}}" date-id="{{v.id}}">
+                                     <div class="collection-color-icon n1">
+                                     </div><div class="title">{{v.title}}</div>
+                                     <div class="share-icon-container"></div>
+                                     <div class="row-divider-bottom"></div>
+                                     <input type="text" ng-model="v.title">
+                                  </li>
+                             </new-ul>
+                     </div>
+                 </div>
+              </div>
+         </div>
+         <!--有部分-->
+         <div class="right">
+             <div class="header">
+                 <div class="search-box">
+                     <div class="search-img">
+                         <div class="img"></div>
+                     </div>
+                     <div class="search">
+                         <input type="text" value="搜索所有提醒">
+                     </div>
+                 </div>
+                 <div class="header-right">
+                     <div class="shezhi">
+                         <div class="title">Laws...</div>
+                         <div class="chevron"></div>
+                     </div>
+                     <div class="line"></div>
+                     <div class="support">
+                         <div class="help-icon"></div>
+                     </div>
+                 </div>
+             </div>
+             <div class="main">
+                 <div class="list">
+                     <div class="list-title {{current.them}}">{{current.title}}</div>
+                     <div class="xuanxiang {{current.them}}" ng-click="cancel()">选项</div>
+                 </div>
+                 <div class="list-content">
+                     <my-div>
+                         <div class="row-divider-top"></div>
+                         <div class="done-box">
+                             <div class="anniu">
+                                 <div class="img"></div>
+                             </div>
+                             <div class="done">已完成：{{count()}}项</div>
+                         </div>
+                         <ul class="yiwan" >
+                             <li class="{{current.them}}" ng-repeat="v in current.todo|filter:{state:1}" date-id="{{v.id}}">
+                                 <div class="button" ng-click="v.state=0">
+                                     <div class="tupian"></div>
+                                 </div>
+                                 <div class="text" >{{v.title}}</div>
+                                 <div class="row-divider-top"></div>
+                                 <div class="background"></div>
+                                 <input type="text" value="ggg">
+                                 <div class="delete" ng-click="delete1(v.id)">删除</div>
+                             </li>
+                             <div class="clear"></div>
+                         </ul>
+                         <ul class="weiwan" >
+                             <li class="{{current.them}}" ng-repeat="v in current.todo|filter:{state:0}" date-id="{{v.id}}">
+                                 <div class="delete" ng-click="delete1(v.id)">删除</div>
+                                 <div class="button" ng-click="v.state=1">
+                                     <div class="tupian" ng-click="v.state=1"></div>
+                                 </div>
+                                 <div class="text" >{{v.title}}</div>
+                                 <div class="row-divider-top"></div>
+                                 <div class="background"></div>
+                                 <input type="text" value="ggg" ng-model='v.title' ng-keyup="addtodos($event)" >
+                             </li>
+                         </ul>
+                         <div class="new" ng-click="addtodo()">
+                             <div class="row-divider-top"></div>
+                             <div class="row-divider-bottom"></div>
+                             <div class="zeng" ng-model="item">新项目...</div>
+                         </div>
+                     </my-div>
+
+                 </div>
+             </div>
+         </div>
+     </div>
+ </div>
+
+</body>
+</html>
